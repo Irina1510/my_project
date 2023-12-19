@@ -63,7 +63,8 @@ class Booking(models.Model):
     deleted = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.user_id.name
+        return self.user_id.username
+
 
 
 CHOISES_RATING = (
