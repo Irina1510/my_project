@@ -23,6 +23,7 @@ ______________________
 - pip install django
 - pip install python-dotenv
 - pip install psycopg2
+- pip install djangorestframework
 -------------------
 
 Запуск проекта
