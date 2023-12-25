@@ -15,7 +15,7 @@ class Hotel(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def __str__(self):
+    def str(self):
         return self.name
 
 
@@ -31,7 +31,7 @@ class Room(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def __str__(self) -> str:
+    def str(self) -> str:
         return str(self.room_type)
 
     def hotel_name(self) -> str:
@@ -42,13 +42,13 @@ class User(models.Model):
     id = models.BigIntegerField(primary_key=True)
     username = models.CharField(max_length=20, null=False)
     email = models.EmailField(max_length=30)
-    password = models.CharField(max_length=10, null=False)
+    password = models.CharField(max_length=128, null=False)
     bookings = models.CharField(max_length=50, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self) -> str:
-        return self.username
+    def str(self) -> str:
+        return str(self.username)
 
 
 class Booking(models.Model):
@@ -62,7 +62,7 @@ class Booking(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def __str__(self) -> str:
+    def str(self) -> str:
         return self.user_id.username
 
 
@@ -74,6 +74,10 @@ CHOISES_RATING = (
     (4, '4'),
     (5, '5')
 )
+
+rating = models.CharField(max_length=1, choices=CHOISES_RATING,
+                          blank=True, default='1', help_text='Booking rating')
+
 
 class Review(models.Model):
     id = models.BigIntegerField(primary_key=True)
