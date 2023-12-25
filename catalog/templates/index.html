@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h2>Данные из динамически подключаемого шаблона index.html</h2>
+  <p>Сейчас страница получает следующие даные:</p>
+  <ul>
+    <li><strong>Отелей всего:</strong> {{ num_hotel }}</li>
+    <li><strong>Номера:</strong> {{ num_room }}</li>
+  </ul>
+
+{% endblock %}
