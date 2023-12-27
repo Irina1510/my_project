@@ -10,9 +10,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    <style>
+       body {
+          background-image: url("/static/img/D0.png");
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+       }
+    </style>
+
     <!-- Добавление дополнительного статического CSS файла -->
     {% load static %}
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+
 </head>
 
 <body>
@@ -28,7 +39,7 @@
             {% block sidebar %}
             <ul class="sidebar-nav">
                 <li><a href="{% url 'index' %}">Главная</a></li>
-                <li><a href="">Все отели</a></li>
+                <li><a href="{% url 'hotel' %} ">Все отели</a></li>
                 <li><a href="">Все свободные номера</a></li>
                 <li><a href="">Войти</a></li>
             </ul>

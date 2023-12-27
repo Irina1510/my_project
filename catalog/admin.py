@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Hotel, Room, Booking, Review
+from .models import Profile, Hotel, Room, Booking, Review
 #Register your models here.
 
 @admin.register(Hotel)
@@ -32,12 +32,11 @@ class BookingAdmin(admin.ModelAdmin):
 'created_at', 'updated_at', 'deleted_at', 'deleted')
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'password', 'bookings',
-'created_at', 'updated_at')
-    list_filter = ('id', 'username', 'email', 'bookings', 'created_at', 'updated_at')
-    search_fields = ('id', 'username', 'email', 'bookings', 'created_at', 'updated_at')
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('bookings', 'updated_at')
+    list_filter = ('bookings', 'updated_at')
+    search_fields = ('bookings', 'updated_at')
 
 
 
