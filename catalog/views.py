@@ -72,27 +72,6 @@ def room(request, hotel_id):
     )
 
 
-def hotel(request):
-    """
-    отображение отелей.
-    """
-    hotels = Hotel.objects.all()
-    # hotels.objects.filter(hotels=id, Room=id).count()
-    for item in hotels:
-
-        item.free_rooms = Room.objects.filter(hotel_id_id=item.id).count()
-        if item.free_rooms > 0:
-            item.prop = format_html('<button class="btn btn-success js-tooltip" title="" data-original-title="Бронировать номер">Бронировать</button>')
-        else:
-            item.prop = format_html(
-                '<p style="color: red;">В данном отеле все номера заняты</p>')
-    return render(
-        request,
-        'hotel.html',
-        context={'hotel': hotels},
-    )
-
-
 # def registration(request):
 #     if request.method == 'POST':
 #         form = UserCreationForm(request.POST)
