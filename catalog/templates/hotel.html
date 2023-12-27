@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h2> Список обслуживаемых отелей </h2>
+<table border="2" style="width: 70%;">
+<th scope="col" class="sortable column-name">
+   <div class="text" style="">Номер</div>
+</th>
+<th scope="col" class="sortable column-name" style="text-align: center;">
+   <div class="text">Название</div>
+</th>
+	<th scope="col" class="sortable column-name" style="text-align: center;">
+   <div class="text">расположение</div>
+</th>
+<th scope="col" class="sortable column-name" style="text-align: center;">
+   <div class="text">Описание</div>
+</th>
+<th scope="col" class="sortable column-name" style="text-align: center;">
+   <div class="text">Свободных номеров</div>
+</th>
+<th scope="col" class="sortable column-name" style="text-align: center;">
+   <div class="text">Подробнее</div>
+</th>
+    {% for item in hotel %}
+    <tr style="height: 50px;">
+        <td style="text-align: center;">{{ item.id }}</td>
+        <td style="text-align: center;">{{ item.name }}</td>
+        <td style="text-align: center;">{{ item.location }}</td>
+        <td style="text-align: center;">{{ item.description }}</td>
+        <td style="text-align: center;">{{ item.free_rooms }}</td>
+        <td style="text-align: center;">{{ item.prop }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

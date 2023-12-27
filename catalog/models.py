@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from datetime import datetime
 
 
@@ -15,7 +16,7 @@ class Hotel(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def str(self):
+    def __str__(self):
         return self.name
 
 
@@ -31,23 +32,24 @@ class Room(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def str(self) -> str:
+    def __str__(self) -> str:
         return str(self.room_type)
 
     def hotel_name(self) -> str:
         return self.hotel_id.name
 
 
-class User(models.Model):
-    id = models.BigIntegerField(primary_key=True)
-    username = models.CharField(max_length=20, null=False)
-    email = models.EmailField(max_length=30)
-    password = models.CharField(max_length=128, null=False)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # id = models.BigIntegerField(primary_key=True)
+    # username = models.CharField(max_length=20, null=False)
+    # email = models.EmailField(max_length=30)
+    # password = models.CharField(max_length=10, null=False)
     bookings = models.CharField(max_length=50, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def str(self) -> str:
+    def __str__(self) -> str:
         return str(self.username)
 
 
@@ -62,7 +64,7 @@ class Booking(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
 
-    def str(self) -> str:
+    def __str__(self) -> str:
         return self.user_id.username
 
 
