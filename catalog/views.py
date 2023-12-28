@@ -4,6 +4,7 @@ from .forms import SignUpForm
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.utils.html import format_html
+import datetime
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -48,31 +49,77 @@ def hotel(request):
 
 def room(request, hotel_id):
     """
-    отображение номеров отеля.
+    отображение и бронирование номеров отеля.
     """
+    success = ''
+    error = ''
+    today = datetime.date.today()
+    date_min = today.strftime('%Y-%m-%d')
+    date_from = today.strftime('%Y-%m-%d')
+    date_to = (today + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+    # success = date_min
+
+    if request.method == 'POST':
+        room_id = request.POST.get('room')
+        if room_id is None or room_id.isdigit() is False:
+            error = "Не выбран номер"
+        user_id = 1
+        date_from = request.POST.get('date_from')
+        date_to = request.POST.get('date_to')
+
+        date1_obj = datetime.datetime.strptime(date_from, '%Y-%m-%d')
+        date2_obj = datetime.datetime.strptime(date_to, '%Y-%m-%d')
+
+        if date1_obj >= date2_obj:
+            error = "дата завершения не может быть равна или меньше даты начала"
+
+        if error == '':
+            booking = Booking(user_id_id=user_id, check_in_date=date_from, check_out_date=date_to)
+            booking.save()  # Сохраняем запись в базе данных
+            success = 'Номер успешно забронирован'
+
+
     selected_hotel = Hotel.objects.filter(id=hotel_id).all()[0]
     hotel_name = selected_hotel.name
     room_data = Room.objects.filter(hotel_id_id=hotel_id).all()
+    can_bind = False
     for item in room_data:
         if item.available:
-            item.state = format_html(
-                '<p style="color: green;">свободен</p>')
-            item.prop = format_html('<button class="btn btn-success js-tooltip" title="" '
-                                    'onclick="bindRoom(' + str(item.id) + ')" > Бронировать </button>')
+            can_bind = True
         else:
             item.state = format_html(
                 '<p style="color: red;">занят</p>')
             item.prop = format_html(
                 '<p style="color: red;">---</p>')
+    # , 'hotel_id': hotel_id
+    # context['date_from'] = date_from
 
     return render(
         request,
         'room.html',
-        context={'rooms': room_data, 'hotel_name': hotel_name},
+        context={'rooms': room_data, 'hotel_name': hotel_name, 'date_min': date_min, 'date_from': date_from,
+                 'date_to': date_to,
+                 'can_bind': can_bind, 'success': success, 'error': error},
     )
 
-
-# def registration(request):
+# def login_user(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             # получаем имя пользователя и пароль из формы
+#             username = form.cleaned_data.get('username')
+#             password = form.cleaned_data.get('password')
+#             # выполняем аутентификацию
+#             user = authenticate(username=username, password=password)
+#             login(request, user)
+#             return redirect('/')
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'signup.html', {'form': form})
+#
+#
+# def logout_user(request):
 #     if request.method == 'POST':
 #         form = UserCreationForm(request.POST)
 #         if form.is_valid():
