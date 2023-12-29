@@ -1,10 +1,13 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm
+from django.urls import reverse
+
+from .forms import RegisterForm, SignUpForm
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.utils.html import format_html
 import datetime
+from django.http import HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -102,42 +105,32 @@ def room(request, hotel_id):
                  'can_bind': can_bind, 'success': success, 'error': error},
     )
 
-# def login_user(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             # получаем имя пользователя и пароль из формы
-#             username = form.cleaned_data.get('username')
-#             password = form.cleaned_data.get('password')
-#             # выполняем аутентификацию
-#             user = authenticate(username=username, password=password)
-#             login(request, user)
-#             return redirect('/')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'signup.html', {'form': form})
-#
-#
-# def logout_user(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             # получаем имя пользователя и пароль из формы
-#             username = form.cleaned_data.get('username')
-#             password = form.cleaned_data.get('password1')
-#             # выполняем аутентификацию
-#             user = authenticate(username=username, password=password)
-#             login(request, user)
-#             return redirect('/')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'signup.html', {'form': form})
+def login_user(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            # получаем имя пользователя и пароль из формы
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            # выполняем аутентификацию
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = SignUpForm()
+
+    return render(request, 'login.html', {'form': form})
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('/')
+    # return HttpResponseRedirect(reverse('/'))
+
 
 def registration(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             # сохранение номера
@@ -147,8 +140,8 @@ def registration(request):
             login(request, user)
             return redirect('/')
     else:
-        form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
 
 class HotelAPIList(generics.ListCreateAPIView):
     queryset = Hotel.objects.all()
