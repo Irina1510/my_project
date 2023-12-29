@@ -41,7 +41,11 @@
                 <li><a href="{% url 'index' %}">Главная</a></li>
                 <li><a href="{% url 'hotel' %} ">Все отели</a></li>
                 <li><a href="">Все свободные номера</a></li>
-                <li><a href="">Войти</a></li>
+            {% if user.is_authenticated %}
+                <li>{{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Войти</a> | <a href="{% url 'register' %}">Регистрация</a></li>
+            {% endif %}
             </ul>
             {% endblock %}
         </div>
