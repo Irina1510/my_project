@@ -2,56 +2,94 @@
 
 {% block content %}
 
-<h3>Номера отеля: "{{ hotel_name }}" </h3>
+<div  class="col-sm-8" style="text-align: center;">
+<h3><strong>Отель: </strong>'<strong style="color: green;"> {{ hotel_name }} </strong>' </h3>
+</div>
+<br><br>
+<div style="row">
+    <div class="col-sm-12">
+        <div class="col-sm-3">
+            Укажите желаемый период бронирования:
+        </div>
+        <form method="POST">
+            <!--        <form method="POST" action="{{ action_hr }}">-->
+            {% csrf_token %}
+            <div class="col-sm-2" style="text-align: right;">
+                <label>С: <input type="date" id="date_from" name="date_from" min="{{ date_min }}"
+                                 value="{{ date_from }}"></label>
+            </div>
+            <div class="col-sm-2" style="text-align: center;">
+                <label>По: <input type="date" id="date_to" name="date_to" min="{{ date_from }}"
+                                  value="{{ date_to}}"></label>
+            </div>
+            <div class="col-sm-2" style="text-align: left;">
+                <button class="btn btn-info js-tooltip" title=""> Показать</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div style="row">
+    &nbsp;
+<br><br>
+</div>
 <table border="2" style="width: 70%;">
-<th scope="col" class="sortable column-name" style="text-align: center;">
-   <div class="text" style="">id</div>
-</th>
-<th scope="col" class="sortable column-name" style="text-align: center;">
-   <div class="text">Цена</div>
-</th>
-  <th scope="col" class="sortable column-name" style="text-align: center;">
-   <div class="text">Состояние</div>
-</th>
-<th scope="col" class="sortable column-name" style="text-align: center;">
-   <div class="text"> Выбрать </div>
-</th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text" style="">id</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text">Цена</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text">Состояние</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text"> Выбрать</div>
+    </th>
     {% for item in rooms %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.id }}</td>
-        <td style="text-align: center;">{{ item.price_per_night }}</td>
-        <td style="text-align: center;">{{ item.state }}</td>
-         <td style="text-align: center;"><input type="checkbox" id="{{ item.id }}" onclick="toggleCheckboxes(this)"></td>
+        <td style="text-align: center;">{{ item.price }}</td>
+        {% if item.available %}
+        <td style="text-align: center;"><p style="color: green;">свободен</p></td>
+        <td style="text-align: center;"><input type="checkbox" id="{{ item.id }}" onclick="toggleCheckboxes(this)"></td>
+        {% else %}
+        <td style="text-align: center;"><p style="color: red;">занят</p></td>
+        <td style="text-align: center;"><input type="checkbox" id="" onclick="toggleCheckboxes(this)" disabled></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
 <br>
 {% if error %}
-    <li style="color: red;"><strong>{{ error }}</strong></li>
+<li style="color: red;"><strong>{{ error }}</strong></li>
 {% endif %}
 {% if success %}
-    <li style="color: green;"><strong>{{ success }}</strong></li>
+<li style="color: green;"><strong>{{ success }}</strong></li>
 {% endif %}
 <br>
-<b>Если вы желаете забронировать номер, отметьте номер в столбце "Бронировать", укажите период бронирования и нажмите кнопку "Бронировать"</b>
+<b>Если вы желаете забронировать номер, отметьте номер в столбце "Бронировать", укажите период бронирования и нажмите
+    кнопку "Бронировать"</b>
 <br><br>
+
 <div style="row">
     <div class="col-sm-12">
-    <div class="col-sm-2">
-        <button class="btn btn-success js-tooltip" title=""  > вернуться к списку отелей </button>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-    </div>
+        <div class="col-sm-2">
+            <button class="btn btn-primary js-tooltip" title="" onclick="window.location.href='/hotel'"> вернуться к списку отелей</button>
+        </div>
+        <div class="col-sm-4">
+            &nbsp; &nbsp;
+        </div>
         <form method="POST">
-<!--        <form method="POST" action="{{ action_hr }}">-->
-             {% csrf_token %}
-            <div class="col-sm-2" style="text-align: right;">
-                <label>С: <input type="date" id="date_from" name="date_from" min="{{ date_min}}" value="{{ date_from }}"></label>
-            </div>
-            <div class="col-sm-2" style="text-align: center;">
-                <label>По: <input type="date" id="date_to" name="date_to" min="{{ date_to }}" value="{{ date_to}}"></label>
-            </div>
+            <!--        <form method="POST" action="{{ action_hr }}">-->
+            {% csrf_token %}
+
             <div class="col-sm-2" style="text-align: left;">
-                <input id="room" name="room"  value="" hidden>
-                <button class="btn btn-success js-tooltip" title="" > Бронировать </button>
+                <input type="date" id="selected_date_from" name="date_from" value="{{date_from}}" hidden>
+                <input type="date" id="selected_date_to" name="date_to" value="{{date_to}}" hidden>
+                <input id="room" name="room" value="" hidden>
+                <input id="bind" name="bind" value="yes" hidden>
+                <button class="btn btn-success js-tooltip" title=""> Бронировать на указанную дату </button>
             </div>
 
         </form>

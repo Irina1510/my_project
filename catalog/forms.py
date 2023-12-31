@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+
 class SignUpForm(forms.Form):
     username = forms.CharField(label='Логин',
                 widget=forms.TextInput(attrs={'class': 'form-input'}))
@@ -15,7 +16,6 @@ class SignUpForm(forms.Form):
 
 
 class RegisterForm(UserCreationForm):
-
 
     class Meta:
         model = User

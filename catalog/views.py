@@ -1,4 +1,8 @@
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from django.db.models import Q
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
 
@@ -35,7 +39,7 @@ def hotel(request):
     """
     hotels = Hotel.objects.all()
     for item in hotels:
-        item.free_rooms = Room.objects.filter(hotel_id_id=item.id).count()
+        item.free_rooms = Room.objects.filter(hotel_id=item.id).count()
         rooms_hr = "goToHotel('" + str(item.id) + "')"
         if item.free_rooms > 0:
             item.prop = format_html('<button class="btn btn-success js-tooltip" '
@@ -50,6 +54,7 @@ def hotel(request):
     )
 
 
+@login_required
 def room(request, hotel_id):
     """
     отображение и бронирование номеров отеля.
@@ -60,50 +65,64 @@ def room(request, hotel_id):
     date_min = today.strftime('%Y-%m-%d')
     date_from = today.strftime('%Y-%m-%d')
     date_to = (today + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-    # success = date_min
 
     if request.method == 'POST':
         room_id = request.POST.get('room')
-        if room_id is None or room_id.isdigit() is False:
-            error = "Не выбран номер"
-        user_id = 1
+        try_bind = request.POST.get('bind')
+        if try_bind is not None:
+            if room_id is None or room_id.isdigit() is False:
+                error = "Не выбран номер"
+
+        user = request.user
+        user_id = user.id
         date_from = request.POST.get('date_from')
         date_to = request.POST.get('date_to')
-
         date1_obj = datetime.datetime.strptime(date_from, '%Y-%m-%d')
         date2_obj = datetime.datetime.strptime(date_to, '%Y-%m-%d')
 
         if date1_obj >= date2_obj:
-            error = "дата завершения не может быть равна или меньше даты начала"
+            date_to = (date1_obj + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 
-        if error == '':
-            booking = Booking(user_id_id=user_id, check_in_date=date_from, check_out_date=date_to)
+        if try_bind is not None and error == '':
+            booking = Booking(room_id=room_id, user_id=user_id, check_in_date=date_from, check_out_date=date_to)
             booking.save()  # Сохраняем запись в базе данных
             success = 'Номер успешно забронирован'
 
-
     selected_hotel = Hotel.objects.filter(id=hotel_id).all()[0]
     hotel_name = selected_hotel.name
-    room_data = Room.objects.filter(hotel_id_id=hotel_id).all()
-    can_bind = False
-    for item in room_data:
-        if item.available:
-            can_bind = True
-        else:
-            item.state = format_html(
-                '<p style="color: red;">занят</p>')
-            item.prop = format_html(
-                '<p style="color: red;">---</p>')
-    # , 'hotel_id': hotel_id
-    # context['date_from'] = date_from
+    # date_from = '2024-01-02'
+
+    room_data = Room.objects.exclude(
+        id__in=Booking.objects.filter(
+            check_out_date__gt=date_from
+        ).values('room_id')
+    ).filter(hotel_id=hotel_id)
 
     return render(
         request,
         'room.html',
         context={'rooms': room_data, 'hotel_name': hotel_name, 'date_min': date_min, 'date_from': date_from,
                  'date_to': date_to,
-                 'can_bind': can_bind, 'success': success, 'error': error},
+                 'success': success, 'error': error},
     )
+
+
+@login_required
+def details(request):
+    user = request.user
+    user_id = user.id
+
+    user_data = Booking.objects.filter(user_id=user_id).all()
+    # check_in_date
+    # check_out_date
+    # created_at
+    # room_id
+    return render(
+        request,
+        'details.html',
+        context={'user_data': user_data},
+    )
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -115,6 +134,12 @@ def login_user(request):
             # выполняем аутентификацию
             user = authenticate(username=username, password=password)
             login(request, user)
+
+            # next_url = request.GET.get('next')
+            # if next_url:
+            #     return redirect(next_url)
+            # else:
+            #     return redirect('/')
             return redirect('/')
     else:
         form = SignUpForm()
@@ -142,6 +167,7 @@ def registration(request):
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
 
 class HotelAPIList(generics.ListCreateAPIView):
     queryset = Hotel.objects.all()
