@@ -94,7 +94,8 @@ def room(request, hotel_id):
 
     room_data = Room.objects.exclude(
         id__in=Booking.objects.filter(
-            check_out_date__gt=date_from
+            Q(check_in_date__lt=date_from, check_out_date__gt=date_from)
+            | Q(check_in_date__lt=date_to, check_out_date__gt=date_to)
         ).values('room_id')
     ).filter(hotel_id=hotel_id)
 
@@ -117,6 +118,7 @@ def details(request):
     # check_out_date
     # created_at
     # room_id
+
     return render(
         request,
         'details.html',
