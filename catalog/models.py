@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 
-# Create your models here.
 class Hotel(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=50)
@@ -19,6 +18,9 @@ class Hotel(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Отель'
+        verbose_name_plural = 'Отели'
 
 class Room(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -37,6 +39,10 @@ class Room(models.Model):
 
     def hotel_name(self) -> str:
         return self.hotel.name
+
+    class Meta:
+        verbose_name = 'Номер'
+        verbose_name_plural = 'Номера'
 
 
 class Profile(models.Model):
@@ -78,6 +84,10 @@ class Booking(models.Model):
     def __str__(self):
         return f"Booking {self.id}"
 
+    class Meta:
+        verbose_name = 'Бронь'
+        verbose_name_plural = 'Брони'
+
 
 # class Booking(models.Model):
 #     id = models.BigIntegerField(primary_key=True)
@@ -116,3 +126,7 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'

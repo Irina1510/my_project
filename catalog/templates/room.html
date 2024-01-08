@@ -38,6 +38,9 @@
         <div class="text" style="">id</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text">Описание номера</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
         <div class="text">Цена</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
@@ -49,6 +52,7 @@
     {% for item in rooms %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.id }}</td>
+        <td style="text-align: center;">{{ item.room_type }}</td>
         <td style="text-align: center;">{{ item.price }}</td>
         {% if item.available %}
         <td style="text-align: center;"><p style="color: green;">свободен</p></td>
