@@ -7,6 +7,9 @@
         <div class="text">Запись номера бронирования</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text">Описание номера</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
         <div class="text">Дата бронирования</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
@@ -18,6 +21,7 @@
 
     {% for item in user_data %}
     <tr style="height: 50px;">
+        <td style="text-align: center;">{{ item.room.id }}</td>
         <td style="text-align: center;">{{ item.room }}</td>
         <td style="text-align: center;">{{ item.created_at }}</td>
         <td style="text-align: center;">{{ item.check_in_date }}</td>
