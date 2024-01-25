@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', login_user, name='login_user'),
     # path('login/', login, name='login'),
     path('logout/', logout_user, name='logout'),
+    path('addreview/', add_review, name='addreview'),
     path('hotellist/', HotelAPIList.as_view()),
     path('hotellist/<int:pk>/', HotelAPIUpdate.as_view()),
     path('hoteldetail/<int:pk>/', HotelAPIDetail.as_view()),

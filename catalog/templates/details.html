@@ -4,7 +4,10 @@
 {% block content %}
 <table border="2" style="width: 70%;">
     <th scope="col" class="sortable column-name" style="text-align: center;">
-        <div class="text">Запись номера бронирования</div>
+        <div class="text">ID номера</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text">Название отеля</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
         <div class="text">Описание номера</div>
@@ -22,6 +25,7 @@
     {% for item in user_data %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.room.id }}</td>
+        <td style="text-align: center;">{{ item.room.hotel.name }}</td>
         <td style="text-align: center;">{{ item.room }}</td>
         <td style="text-align: center;">{{ item.created_at }}</td>
         <td style="text-align: center;">{{ item.check_in_date }}</td>

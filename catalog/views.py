@@ -4,16 +4,15 @@ from django.db.models import F
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse
 
-from .forms import RegisterForm, SignUpForm
+from .forms import RegisterForm, SignUpForm, AddReviewForm
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.utils.html import format_html
 import datetime
 from django.http import HttpResponseRedirect
 from rest_framework.response import Response
-from rest_framework.views import APIView
+
 
 from .models import Hotel, Room, Booking, Review, Profile
 from .serializers import HotelSerializer, RoomSerializerUser, RoomSerializer, BookingSerializer, ReviewSerializer
@@ -49,7 +48,7 @@ def hotel(request):
                 '<p style="color: red;">В данном отеле все номера заняты</p>')
     return render(
         request,
-        'hotel.html',
+        'hotel2.html',
         context={'hotel': hotels},
     )
 
@@ -137,12 +136,6 @@ def login_user(request):
             # выполняем аутентификацию
             user = authenticate(username=username, password=password)
             login(request, user)
-
-            # next_url = request.GET.get('next')
-            # if next_url:
-            #     return redirect(next_url)
-            # else:
-            #     return redirect('/')
             return redirect('/')
     else:
         form = SignUpForm()
@@ -153,7 +146,6 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('/')
-    # return HttpResponseRedirect(reverse('/'))
 
 
 def registration(request):
@@ -162,7 +154,7 @@ def registration(request):
         if form.is_valid():
             user = form.save()
             # сохранение номера
-            # Profile.objects.create(user=user, phone_number=form.cleaned_data.get('phone_number'))
+            # Profile.objects.create(media=media, phone_number=form.cleaned_data.get('phone_number'))
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
@@ -170,6 +162,20 @@ def registration(request):
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
+@login_required
+def add_review(request):
+    if request.method == 'POST':
+        form = AddReviewForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.save()
+            return redirect('/')
+    else:
+        form = AddReviewForm()
+
+    return render(request, 'addreview.html', {'form': form})
 
 
 class HotelAPIList(generics.ListCreateAPIView):
