@@ -25,10 +25,10 @@ class RoomSerializer(serializers.ModelSerializer):
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ('id', 'user', 'room', 'check_in_date', 'check_out_date')
+        fields = ('id', 'media', 'room', 'check_in_date', 'check_out_date')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('id', 'user', 'hotel', 'comment', 'rating', 'created_at', 'updated_at')
+        fields = ('id', 'media', 'hotel', 'comment', 'rating', 'created_at', 'updated_at')

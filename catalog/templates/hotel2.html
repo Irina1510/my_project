@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h2> Список обслуживаемых отелей </h2>
+
+    {% for item in hotel %}
+
+      <div><p align="left"><a href="{% url 'addreview' %} ">Добавить отзыв</a> |
+      <a href=" ">Отзывы</a></p>
+      </div>
+
+{% if item.photos %}
+         <p><img class="img-article left" src="{{item.photos.url}}" height="200px" align="left" hspace="10"></p>
+{% endif %}
+               <h2>{{ item.name }}</h2>
+               <p>{{ item.location }}</p>
+     {% autoescape off %}
+               {{ item.description }}
+               <p><b>Свободных номеров: {{ item.free_rooms }}</b></p>
+               <p>{{ item.prop|linebreaks }}</p>
+     {% endautoescape %}
+<hr>
+     {% endfor %}
+{% endblock %}

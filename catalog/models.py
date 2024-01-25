@@ -8,7 +8,7 @@ class Hotel(models.Model):
     name = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
     description = models.TextField(max_length=300)
-    photos = models.ImageField(upload_to='user', blank=True)
+    photos = models.ImageField(upload_to='media', blank=True)
     rating = models.SmallIntegerField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -26,7 +26,7 @@ class Room(models.Model):
     id = models.BigAutoField(primary_key=True)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='hotel_room')
     room_type = models.CharField(max_length=50)
-    photos = models.ImageField(upload_to='user', blank=True)
+    photos = models.ImageField(upload_to='media', blank=True)
     price = models.FloatField(default=100)
     available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -83,6 +83,7 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking {self.id}"
+
 
     class Meta:
         verbose_name = 'Бронь'

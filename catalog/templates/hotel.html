@@ -22,14 +22,18 @@
 <th scope="col" class="sortable column-name" style="text-align: center;">
    <div class="text">Подробнее</div>
 </th>
+
     {% for item in hotel %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.id }}</td>
-        <td style="text-align: center;">{{ item.name }}</td>
+        <td style="text-align: center;">{{ item.name }}
+            <a href="{% url 'addreview' %} ">Добавить отзыв</a></td>
         <td style="text-align: center;">{{ item.location }}</td>
         <td style="text-align: center;">{{ item.description }}</td>
         <td style="text-align: center;">{{ item.free_rooms }}</td>
         <td style="text-align: center;">{{ item.prop }}</td>
+        <td style="text-align: center;"><button><a href="{% url 'addreview' %} ">Добавить отзыв</a></button></td>
+
     </tr>
     {% endfor %}
 </table>
