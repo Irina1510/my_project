@@ -154,7 +154,7 @@ def registration(request):
         if form.is_valid():
             user = form.save()
             # сохранение номера
-            # Profile.objects.create(media=media, phone_number=form.cleaned_data.get('phone_number'))
+            # Profile.objects.create(user=user, phone_number=form.cleaned_data.get('phone_number'))
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
