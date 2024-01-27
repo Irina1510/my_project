@@ -38,6 +38,9 @@
         <div class="text" style="">id</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text" style="">Фото номера</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
         <div class="text">Описание номера</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
@@ -52,6 +55,11 @@
     {% for item in rooms %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.id }}</td>
+        {% if item.photos %}
+        <td style="text-align: center;"><img src="{{item.photos.url}}" height="100px"></td>
+        {% else %}
+        <td style="text-align: center;"><p>Фото отсутствует</p></td>
+        {% endif %}
         <td style="text-align: center;">{{ item.room_type }}</td>
         <td style="text-align: center;">{{ item.price }}</td>
         {% if item.available %}

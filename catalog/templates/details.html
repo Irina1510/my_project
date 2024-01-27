@@ -7,6 +7,9 @@
         <div class="text">ID номера</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
+        <div class="text">Фото номера</div>
+    </th>
+    <th scope="col" class="sortable column-name" style="text-align: center;">
         <div class="text">Название отеля</div>
     </th>
     <th scope="col" class="sortable column-name" style="text-align: center;">
@@ -25,6 +28,11 @@
     {% for item in user_data %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.room.id }}</td>
+        {% if item.room.photos %}
+        <td style="text-align: center;"><img src="{{item.room.photos.url}}" height="100px"></td>
+        {% else %}
+        <td style="text-align: center;"><p>Фото отсутствует</p></td>
+        {% endif %}
         <td style="text-align: center;">{{ item.room.hotel.name }}</td>
         <td style="text-align: center;">{{ item.room }}</td>
         <td style="text-align: center;">{{ item.created_at }}</td>
