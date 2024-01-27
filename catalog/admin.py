@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models import Avg
+
 from .models import Profile, Hotel, Room, Booking, Review
 from django.utils.safestring import mark_safe
 
@@ -7,7 +9,7 @@ from django.utils.safestring import mark_safe
 
 @admin.register(Hotel)
 class HotelAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'location', 'description', 'hotel_photo', 'rating')
+    list_display = ('id', 'name', 'location', 'description', 'hotel_photo', 'rating', 'hotel_rating')
     readonly_fields = ['hotel_photo']
     list_display_links = ('id', 'name')
     list_filter = ('id', 'name', 'location', 'rating', 'created_at')
@@ -20,6 +22,11 @@ class HotelAdmin(admin.ModelAdmin):
         if hotel.photos:
             return mark_safe(f"<img src='{hotel.photos.url}' height=70>")
         return "Без фото"
+
+    @admin.display(description='Рейтинг пользователей')
+    def hotel_rating(self, review: Review):
+        return f'{ Review.objects.filter(hotel_id=review.id).aggregate(Avg=Avg("rating"))}'
+
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
@@ -82,3 +89,4 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('id', 'user', 'hotel', 'rating')
     search_fields = ('user', 'hotel', 'rating')
     list_per_page = 10
+
