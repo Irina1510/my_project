@@ -4,7 +4,7 @@
 
 <h2> Список обслуживаемых отелей </h2>
 
-    {% for item in hotel %}
+    {% for item in page_obj %}
 
       <div><p align="left"><a href="{% url 'addreview' %} ">Добавить отзыв</a> |
       <a href=" ">Отзывы</a></p>

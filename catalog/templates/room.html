@@ -18,7 +18,7 @@
                 <label>С: <input type="date" id="date_from" name="date_from" min="{{ date_min }}"
                                  value="{{ date_from }}"></label>
             </div>
-            <div class="col-sm-2" style="text-align: center;">
+            <div class="col-sm-3" style="text-align: center;">
                 <label>По: <input type="date" id="date_to" name="date_to" min="{{ date_from }}"
                                   value="{{ date_to}}"></label>
             </div>
@@ -52,7 +52,7 @@
     <th scope="col" class="sortable column-name" style="text-align: center;">
         <div class="text"> Выбрать</div>
     </th>
-    {% for item in rooms %}
+    {% for item in page_obj %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.id }}</td>
         {% if item.photos %}

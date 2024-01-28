@@ -25,7 +25,7 @@
         <div class="text">Забронирован по</div>
     </th>
 
-    {% for item in user_data %}
+    {% for item in page_obj %}
     <tr style="height: 50px;">
         <td style="text-align: center;">{{ item.room.id }}</td>
         {% if item.room.photos %}
@@ -42,3 +42,4 @@
     {% endfor %}
 </table>
 {% endblock %}
+
