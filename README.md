@@ -17,13 +17,16 @@ http://localhost:8000/
 
 ______________________
 
-Для работы проекта необходимо иметь установленный posgresql версии не ниже ...
+Для работы проекта необходимо иметь установленный posgresql версии не ниже 16.1
 
-Установить в python следующие зависимости:
-- pip install django
-- pip install python-dotenv
-- pip install psycopg2
-- pip install djangorestframework
+Установить в python зависимости из файла requriments.txt:
+ 
+Для ОС Windows:
+- pip install -r requriments.txt
+
+Для ОС linux:
+- pip3 install -r requriments.txt
+
 -------------------
 
 Запуск проекта

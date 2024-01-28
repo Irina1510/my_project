@@ -1,5 +1,6 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import F
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -46,10 +47,14 @@ def hotel(request):
         else:
             item.prop = format_html(
                 '<p style="color: red;">В данном отеле все номера заняты</p>')
+
+    paginator = Paginator(hotels, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(
         request,
         'hotel2.html',
-        context={'hotel': hotels},
+        context={'page_obj': page_obj},
     )
 
 
@@ -99,10 +104,14 @@ def room(request, hotel_id):
         ).values('room_id')
     ).filter(hotel_id=hotel_id)
 
+    paginator = Paginator(room_data, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(
         request,
         'room.html',
-        context={'rooms': room_data, 'hotel_name': hotel_name, 'date_min': date_min, 'date_from': date_from,
+        context={'page_obj': page_obj, 'hotel_name': hotel_name, 'date_min': date_min, 'date_from': date_from,
                  'date_to': date_to,
                  'success': success, 'error': error},
     )
@@ -118,11 +127,13 @@ def details(request):
     # check_out_date
     # created_at
     # room_id
-
+    paginator = Paginator(user_data, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(
         request,
         'details.html',
-        context={'user_data': user_data},
+        context={'page_obj': page_obj},
     )
 
 

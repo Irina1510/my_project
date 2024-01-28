@@ -85,8 +85,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'hotel', 'comment', 'rating')
-    list_filter = ('id', 'user', 'hotel', 'rating')
+    list_display = ('user', 'hotel', 'comment', 'rating')
+    list_filter = ('user', 'hotel', 'rating')
     search_fields = ('user', 'hotel', 'rating')
     list_per_page = 10
 
